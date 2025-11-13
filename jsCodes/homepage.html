@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><title>Homepage</title>
+    <style>
+        *{
+            margin:0; 
+            padding:0 ; 
+        }
+        body{
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
+</head>
+<body>
+
+<button onmouseover="colorChange('#ff6b6b')" onmouseout="colorChange('#000000')">Hover me</button>
+<input type="text" onfocus="colorChange('#4ecdc4')" onblur="colorChange('#444444')" placeholder="Focus me">
+<script>
+
+function colorChange(color){
+    document.body.style.backgroundColor = color ; 
+}
+</script>
+</body>
+</html>

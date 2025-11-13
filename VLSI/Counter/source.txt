@@ -1,0 +1,46 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_arith.ALL;
+use IEEE.STD_LOGIC_unsigned.ALL;
+
+
+entity counter is
+    Port ( clk,rst : in STD_LOGIC;
+           y : out STD_LOGIC_VECTOR (7 downto 0));
+end counter;
+
+architecture Behavioral of counter is
+signal temp:std_logic_vector(7 downto 0);
+signal t:std_logic_vector(27 downto 0);
+signal sclk,srst:std_logic;
+begin
+process(clk,rst)
+begin
+if clk='1' and clk'event then
+if rst='1' then
+srst<='1';
+sclk<='0';
+t<=x"0000000";
+else
+t<=t+1;
+if t(27)='1' then
+srst<='0';
+else null;
+end if;
+sclk<=t(26);
+end if;
+end if;
+end process;
+process(sclk,srst)
+begin
+if sclk='1' and sclk'event then
+if srst='1' then
+temp<="00000000";
+else
+temp<=temp+1;
+end if;
+end if;
+end process;
+y<=temp;
+end Behavioral;

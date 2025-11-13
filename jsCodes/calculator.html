@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <style>
+        .buttons{
+            display:  grid;
+            grid-template-columns: 60px 60px 60px 60px ;
+            grid-template-rows: 60px 60px 60px 60px 60px;
+            gap: 6px;
+        }
+        input{
+            width: 250px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+<h1>Calculator</h1>
+<input id="display" readonly >
+<div class="buttons" style="width:210px">
+    <button onclick="addDisplay(1)">1</button>
+    <button onclick="addDisplay(2)">2</button>
+    <button onclick="addDisplay(3)">3</button>
+    <button onclick="addDisplay(4)">4</button>
+    <button onclick="addDisplay(5)">5</button>
+    <button onclick="addDisplay(6)">6</button>
+    <button onclick="addDisplay(7)">7</button>
+    <button onclick="addDisplay(8)">8</button>
+    <button onclick="addDisplay(9)">9</button>
+    <button onclick="addDisplay(0)">0</button>
+    <button onclick="setOperator('+')">+</button>
+    <button onclick="setOperator('-')">-</button>
+    <button onclick="setOperator('*')">*</button>
+    <button onclick="setOperator('/')">/</button>
+    <button onclick="setOperator('^2')">X^2</button>
+    <button onclick="Calculate()">=</button>
+    <button onclick="Clear()">Clear</button>
+
+
+    <script>
+        const display = document.getElementById('display');
+        let temp = 0 ; 
+        let operator = ''; 
+        function addDisplay(v) { 
+            display.value += v ; 
+        }
+        function Clear(){
+            temp  = 0 ;
+            operator = '' ;
+            display.value = '' ;
+        }
+
+        function setOperator(op){
+            temp = parseInt(display.value) ;
+            operator = op ;
+            display.value = '' ;
+        }
+        function Calculate(){ 
+            let current = parseInt(display.value) ;
+            let result = 0 ; 
+            switch(operator){
+                case '+':
+                    result = temp + current ;
+                    break ;
+                case '-':
+                    result = temp - current ;
+                    break ;
+                case '*':
+                    result = temp * current ;
+                    break ;
+                case '/':
+                    result = temp / current ;
+                    break ;
+            }
+            display.value = result ;
+        }
+
+    </script>
+</body>
+</html>

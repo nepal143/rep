@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><title>Set Operations</title></head>
+<body>
+<h1>Set Operations</h1>
+<input id="a" placeholder="Set A (comma separated)" value="1,2,3,4">
+<input id="b" placeholder="Set B (comma separated)" value="3,4,5,6">
+<button onclick="calc()">Calculate</button>
+<div id="result"></div>
+
+<script>
+function calc() {
+    let a = new Set(document.getElementById('a').value.split(','));
+    let b = new Set(document.getElementById('b').value.split(','));
+    const resultDiv = document.getElementById('result');
+    let content = ''; 
+    content += `Union: ${[ ...new Set([...a, ...b]) ]}<br>`;
+    content += `Intersection: ${[ ...new Set([...a].filter(x=> b.has(x)))]}<br>`;
+    content += `Difference A-B: ${[ ...new Set([...a].filter(x=> !b.has(x)))]}<br>`;
+    content += `Symmetric Difference: ${[ ...new Set([[...a].filter(x=> !b.has(x)) , [...b].filter(x=> !a.has(x)) ])]}`;
+    resultDiv.innerHTML = content;
+}
+</script>
+</body>
+</html>

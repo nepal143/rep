@@ -1,0 +1,77 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 06/25/2019 02:26:44 AM
+-- Design Name: 
+-- Module Name: ALU - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_arith.ALL;
+use IEEE.STD_LOGIC_unsigned.ALL;
+
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity ALU is
+    Port ( areg,breg : in STD_LOGIC_VECTOR (3 downto 0);
+           cin,al : in STD_LOGIC;
+           op : in STD_LOGIC_VECTOR (1 downto 0);
+           dout : out STD_LOGIC_VECTOR (3 downto 0);
+           cout : out STD_LOGIC);
+end ALU;          
+
+architecture Behavioral of ALU is
+signal at,bt,dt:std_logic_vector(4 downto 0);
+begin
+at<='0'&areg;
+bt<='0'&breg;
+process(at,bt,cin,al,op)
+begin
+if al='0' then
+case op is
+when "00"=> dt<=at+bt;
+when "01"=> dt<=at+bt+cin;
+when "10"=> dt<=at-bt;
+when "11"=> dt<=at-bt-cin;
+when others=>null; 
+end case;
+else
+case op is 
+when "00"=>
+dt<=at and bt;
+when "01"=>
+dt<=at or bt;
+when "10"=>
+dt<=at xor bt;
+when "11"=>
+dt<=not at;
+when others=>null;
+end case;
+end if;
+end process;
+cout<=dt(4);
+dout<=dt(3 downto 0);
+
+end Behavioral;

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="area-of-triangle">
+    <h1>Calculate Area of Triangle</h1>
+    <input type="number" id="base" name="base" placeholder="base"><br><br>
+    <input type="number" id="height" name="height" placeholder="height"><br><br>
+    <button id="calculateBtn" onclick="calculateTrigleArea()">Calculate Area</button>
+
+    <h2 id="result"></h2>
+    </div>
+    <div class="area-of-circle">
+    <h1>Calculate Area of Circle</h1>
+    <input type="number" id="radius" name="radius" placeholder="radius"><br><br>
+    <button id="calculateCircleBtn" onclick="calculateCircleArea()">Calculate Area</button>
+    <h2 id="circleResult"></h2>
+    </div>
+
+    <div class="area-of-rectangle">
+        <h1> Calculate area of Rectangle </h1>
+
+        <input type="number" id="length" name="length" placeholder="length"> <br><br>
+
+        <input type="number" id="width" name="width" placeholder=" width"> <br><br>
+        <button id="calculateRectangleBtn" onclick="calculateRectangleArea()"> Calculate Area </button>
+        <h2 id="rectangleResult"></h2>
+    </div>
+
+
+
+
+    <script>
+        const calculateTrigleArea = () =>{
+            const base  = document.getElementById('base').value; 
+            const height = document.getElementById('height').value;
+            const area = 0.5 *base*height; 
+            const result = document.getElementById('result');
+            result.innerText = `Area Of triangle = ${area}`;
+        }
+        const calculateCircleArea = () =>{
+            const radius  = document.getElementById('radius').value; 
+            const area = Math.PI * radius * radius; 
+            const result = document.getElementById('circleResult');
+            result.innerText = `Area Of Circle = ${area.toFixed(2)}`;
+        }
+        const calculateRectangleArea = () =>{
+            const length  = document.getElementById('length').value; 
+            const width  = document.getElementById('width').value; 
+            const area = length * width; 
+            const result = document.getElementById('rectangleResult');
+            result.innerText = `Area Of Rectangle = ${area}`;
+        }
+
+    </script>
+</body>
+</html>

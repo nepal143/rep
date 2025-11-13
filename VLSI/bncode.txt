@@ -1,0 +1,480 @@
+ALU 
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_arith.ALL;
+use IEEE.STD_LOGIC_unsigned.ALL;
+
+
+
+entity ALU is
+    Port ( areg,breg : in STD_LOGIC_VECTOR (3 downto 0);
+           cin,al : in STD_LOGIC;
+           op : in STD_LOGIC_VECTOR (1 downto 0);
+           dout : out STD_LOGIC_VECTOR (3 downto 0);
+           cout : out STD_LOGIC);
+end ALU;          
+
+architecture Behavioral of ALU is
+signal at,bt,dt:std_logic_vector(4 downto 0);
+begin
+at<='0'&areg;
+bt<='0'&breg;
+process(at,bt,cin,al,op)
+begin
+if al='0' then
+case op is
+when "00"=> dt<=at+bt;
+when "01"=> dt<=at+bt+cin;
+when "10"=> dt<=at-bt;
+when "11"=> dt<=at-bt-cin;
+when others=>null; 
+end case;
+else
+case op is 
+when "00"=>
+dt<=at and bt;
+when "01"=>
+dt<=at or bt;
+when "10"=>
+dt<=at xor bt;
+when "11"=>
+dt<=not at;
+when others=>null;
+end case;
+end if;
+end process;
+cout<=dt(4);
+dout<=dt(3 downto 0);
+
+end Behavioral;
+
+
+set_property PACKAGE_PIN R2 [get_ports areg[3]]
+set_property PACKAGE_PIN T1 [get_ports areg[2]]
+set_property PACKAGE_PIN U1 [get_ports areg[1]]
+set_property PACKAGE_PIN W2 [get_ports areg[0]]
+
+set_property PACKAGE_PIN R3 [get_ports breg[3]]
+set_property PACKAGE_PIN T2 [get_ports breg[2]]
+set_property PACKAGE_PIN T3 [get_ports breg[1]]
+set_property PACKAGE_PIN V2 [get_ports breg[0]]
+
+set_property PACKAGE_PIN V17 [get_ports cin]
+set_property PACKAGE_PIN V16 [get_ports al]
+
+set_property PACKAGE_PIN W17 [get_ports op[1]]
+set_property PACKAGE_PIN W16 [get_ports op[0]]
+
+set_property PACKAGE_PIN V19 [get_ports dout[3]]
+set_property PACKAGE_PIN U19 [get_ports dout[2]]
+set_property PACKAGE_PIN E19 [get_ports dout[1]]
+set_property PACKAGE_PIN U16 [get_ports dout[0]]
+
+set_property PACKAGE_PIN L1 [get_ports cout]
+
+set_property IOSTANDARD LVCMOS33 [get_ports {areg[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {areg[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {areg[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {areg[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {breg[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {breg[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {breg[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {breg[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cin}]
+set_property IOSTANDARD LVCMOS33 [get_ports {al}]
+set_property IOSTANDARD LVCMOS33 [get_ports {op[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {op[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cout}]
+
+---------------------------------------------
+
+7 SEGMENT 
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_unsigned.ALL;
+use IEEE.STD_LOGIC_arith.ALL;
+
+
+entity display is
+    Port ( clk,rst : in STD_LOGIC;
+           data : out STD_LOGIC_VECTOR (7 downto 0);
+           sw1 : out STD_LOGIC_VECTOR (3 downto 0));
+end display;
+
+architecture Behavioral of display is
+signal tmp : std_logic_vector(23 downto 0);
+signal sclk,srst : std_logic;
+signal sw: std_logic_vector(1 downto 0);
+begin
+process(clk, rst)
+begin
+if clk='1' and clk'event then
+if rst= '1' then
+tmp<= x"000000";
+srst<= '1';
+sclk<= '0';
+else
+
+tmp <= tmp + 1;
+if tmp(23)='1' then
+srst <= '0';
+end if;
+sclk <= tmp(22);
+end if;
+end if;
+end process;
+
+process(sclk, srst)
+begin
+if sclk= '1' and sclk'event then
+if srst='1' then
+sw<="00";
+
+else
+
+case sw is
+when "00" => data <= "11111001";sw1<="1110";
+when "01" => data <= "10100100";sw1<="1101";
+when "10" => data <= "10110000";sw1<="1011";
+when "11" => data <= "10011001";sw1<="0111";
+when others => null;
+end case;
+sw<=sw+1;
+end if;
+end if;
+end process;
+
+end Behavioral;
+
+set_property PACKAGE_PIN w5 [get_ports clk]
+set_property PACKAGE_PIN w16 [get_ports rst]
+set_property PACKAGE_PIN W7 [get_ports data[0]]
+set_property PACKAGE_PIN W6 [get_ports data[1]]
+set_property PACKAGE_PIN U8 [get_ports data[2]]
+set_property PACKAGE_PIN V8 [get_ports data[3]]
+set_property PACKAGE_PIN U5 [get_ports data[4]]
+set_property PACKAGE_PIN V5 [get_ports data[5]]
+set_property PACKAGE_PIN U7 [get_ports data[6]]
+set_property PACKAGE_PIN V7 [get_ports data[7]]
+set_property PACKAGE_PIN w4 [get_ports sw1[0]]
+set_property PACKAGE_PIN v4 [get_ports sw1[1]]
+set_property PACKAGE_PIN u4 [get_ports sw1[2]]
+set_property PACKAGE_PIN u2 [get_ports sw1[3]]
+
+
+set_property IOSTANDARD LVCMOS33 [get_ports {clk}]
+set_property IOSTANDARD LVCMOS33 [get_ports {rst}]
+set_property IOSTANDARD LVCMOS33 [get_ports {data[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {data[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {data[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {data[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {data[4]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {data[5]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {data[6]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {data[7]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {sw1[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {sw1[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {sw1[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {sw1[3]}]
+
+---------------------------------------------------------------
+
+USR 
+
+
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets clk_IBUF]
+set_property PACKAGE_PIN R2 [get_ports clk ]
+set_property PACKAGE_PIN T1 [get_ports rst ]
+set_property PACKAGE_PIN U1 [get_ports pl ]
+set_property PACKAGE_PIN w2 [get_ports lr ]
+
+set_property PACKAGE_PIN V17 [get_ports din[0] ]
+set_property PACKAGE_PIN V16 [get_ports din[1] ]
+set_property PACKAGE_PIN W16 [get_ports din[2] ]
+set_property PACKAGE_PIN W17 [get_ports din[3] ]
+set_property PACKAGE_PIN U16 [get_ports dout[0] ]
+set_property PACKAGE_PIN E19 [get_ports dout[1] ]
+set_property PACKAGE_PIN U19 [get_ports dout[2] ]
+set_property PACKAGE_PIN V19 [get_ports dout[3] ]
+
+set_property IOSTANDARD LVCMOS33 [get_ports {clk}]
+set_property IOSTANDARD LVCMOS33 [get_ports {rst}]
+set_property IOSTANDARD LVCMOS33 [get_ports {pl}]
+set_property IOSTANDARD LVCMOS33 [get_ports {lr}]
+set_property IOSTANDARD LVCMOS33 [get_ports {din[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {din[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {din[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {din[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[3]}]
+
+
+
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+
+
+entity srg is
+    Port ( clk,rst,pl,lr : in STD_LOGIC;
+           din : in STD_LOGIC_VECTOR (3 downto 0);
+           dout : out STD_LOGIC_VECTOR (3 downto 0));
+end srg;
+
+architecture Behavioral of srg is
+--signal temp:std_logic_vector(3 downto 0);
+begin
+process(clk,rst)
+variable temp:std_logic_vector(3 downto 0);
+begin
+if clk='1' and clk'event then
+if rst='1' then
+temp:="0000";
+else
+if pl='1' then
+temp:=din;
+elsif lr='1' then
+temp:=temp(2 downto 0) & '0';
+else
+temp:='0' & temp(3 downto 1);
+end if;
+end if;
+end if;
+dout<=temp;
+end process;
+
+end Behavioral;
+
+
+----------------------------------------------
+
+COUNTER 
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_arith.ALL;
+use IEEE.STD_LOGIC_unsigned.ALL;
+
+
+entity counter is
+    Port ( clk,rst : in STD_LOGIC;
+           y : out STD_LOGIC_VECTOR (7 downto 0));
+end counter;
+
+architecture Behavioral of counter is
+signal temp:std_logic_vector(7 downto 0);
+signal t:std_logic_vector(27 downto 0);
+signal sclk,srst:std_logic;
+begin
+process(clk,rst)
+begin
+if clk='1' and clk'event then
+if rst='1' then
+srst<='1';
+sclk<='0';
+t<=x"0000000";
+else
+t<=t+1;
+if t(27)='1' then
+srst<='0';
+else null;
+end if;
+sclk<=t(26);
+end if;
+end if;
+end process;
+process(sclk,srst)
+begin
+if sclk='1' and sclk'event then
+if srst='1' then
+temp<="00000000";
+else
+temp<=temp+1;
+end if;
+end if;
+end process;
+y<=temp;
+end Behavioral;
+
+
+set_property PACKAGE_PIN W5 [get_ports clk]
+set_property PACKAGE_PIN R2 [get_ports rst]
+set_property PACKAGE_PIN U16 [get_ports y[0]]
+set_property PACKAGE_PIN E19 [get_ports y[1]]
+set_property PACKAGE_PIN U19 [get_ports y[2]]
+set_property PACKAGE_PIN V19 [get_ports y[3]]
+set_property PACKAGE_PIN W18 [get_ports y[4]]
+set_property PACKAGE_PIN U15 [get_ports y[5]]
+set_property PACKAGE_PIN U14 [get_ports y[6]]
+set_property PACKAGE_PIN V14 [get_ports y[7]]
+set_property IOSTANDARD LVCMOS33 [get_ports {clk}]
+set_property IOSTANDARD LVCMOS33 [get_ports {rst}]
+set_property IOSTANDARD LVCMOS33 [get_ports {y[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {y[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {y[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {y[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {y[4]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {y[5]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {y[6]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {y[7]}]
+
+------------------------------------------------
+
+FIFO 
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_unsigned.ALL;
+use IEEE.STD_LOGIC_arith.ALL;
+
+entity fifo is
+    Port ( din : in STD_LOGIC_VECTOR (3 downto 0);
+           dout : out STD_LOGIC_VECTOR (3 downto 0);
+           rw,rst,clk : in STD_LOGIC);
+end fifo;
+
+                                                                                                                                                                                                                                                                                                                                                                                                                            architecture Behavioral of fifo is
+type mem is array (0 to 3) of std_logic_vector(3 downto 0);
+signal add: std_logic_vector(1 downto 0);
+signal a:mem;
+begin
+
+process(clk, rst)
+begin
+
+if clk='1' and clk'event then
+if rst='1' then
+add<="00";
+else
+if rw='0' then
+case add is
+when "00" => a(0)<= din;
+when "01" => a(1)<= din;
+when "10" => a(2)<= din;
+when "11" => a(3)<= din;
+when others => null;
+end case;
+add <= add+1;
+
+else
+case add is
+when "00" => dout <= a(0);
+when "01" => dout <= a(1);
+when "10" => dout <= a(2);
+when "11" => dout <= a(3);
+when others => null;
+end case;
+add<= add+1;
+
+end if;
+end if;
+end if;
+end process;
+
+end Behavioral;
+
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets clk_IBUF]
+set_property PACKAGE_PIN R2 [get_ports clk ]
+set_property PACKAGE_PIN T1 [get_ports rst ]
+set_property PACKAGE_PIN U1 [get_ports rw ]
+set_property PACKAGE_PIN V17 [get_ports din[0] ]
+set_property PACKAGE_PIN V16 [get_ports din[1] ]
+set_property PACKAGE_PIN W16 [get_ports din[2] ]
+set_property PACKAGE_PIN W17 [get_ports din[3] ]
+set_property PACKAGE_PIN U16 [get_ports dout[0] ]
+set_property PACKAGE_PIN E19 [get_ports dout[1] ]
+set_property PACKAGE_PIN U19 [get_ports dout[2] ]
+set_property PACKAGE_PIN V19 [get_ports dout[3] ]
+
+set_property IOSTANDARD LVCMOS33 [get_ports {clk}]
+set_property IOSTANDARD LVCMOS33 [get_ports {rst}]
+set_property IOSTANDARD LVCMOS33 [get_ports {rw}]
+set_property IOSTANDARD LVCMOS33 [get_ports {din[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {din[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {din[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {din[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {dout[3]}]
+
+----------------------------------------------------------
+Half_added
+
+CODE: 
+ 
+library IEEE; 
+use IEEE.STD_LOGIC_1164.ALL; 
+ 
+entity half_adder is 
+    Port ( a : in STD_LOGIC; 
+           b : in STD_LOGIC; 
+           sum : out STD_LOGIC; 
+           carry : out STD_LOGIC); 
+end half_adder; 
+ 
+architecture Behavioral of half_adder is 
+ 
+begin 
+ 	
+ 
+end Behavioral; 
+ 
+ 
+PIN LOCK : 
+set_property PACKAGE_PIN R2 [get_ports a] 
+set_property PACKAGE_PIN T1 [get_ports b] 
+set_property PACKAGE_PIN U16 [get_ports carry] 
+set_property PACKAGE_PIN E19 [get_ports sum] 
+set_property IOSTANDARD LVCMOS33 [get_ports a] 
+set_property IOSTANDARD LVCMOS33 [get_ports b] 
+set_property IOSTANDARD LVCMOS33 [get_ports carry] 
+set_property IOSTANDARD LVCMOS33 [get_ports sum]
+
+
+_______________________________________________
+
+Full add
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity full_adder is
+    Port ( a      : in  STD_LOGIC;
+           b      : in  STD_LOGIC;
+           cin    : in  STD_LOGIC;
+           sum    : out STD_LOGIC;
+           carry  : out STD_LOGIC);
+end full_adder;
+
+architecture Behavioral of full_adder is
+begin
+    sum   <= a xor b xor cin;
+    carry <= (a and b) or (b and cin) or (a and cin);
+end Behavioral;
+
+set_property PACKAGE_PIN R2  [get_ports a]
+set_property PACKAGE_PIN T1  [get_ports b]
+set_property PACKAGE_PIN T2  [get_ports cin]
+set_property PACKAGE_PIN U16 [get_ports carry]
+set_property PACKAGE_PIN E19 [get_ports sum]
+
+set_property IOSTANDARD LVCMOS33 [get_ports a]
+set_property IOSTANDARD LVCMOS33 [get_ports b]
+set_property IOSTANDARD LVCMOS33 [get_ports cin]
+set_property IOSTANDARD LVCMOS33 [get_ports carry]
+set_property IOSTANDARD LVCMOS33 [get_ports sum]
+
+
+

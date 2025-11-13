@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StringComparision</title>
+</head>
+<body>
+    <input type="text" id ="string1" placeholder="Enter first string">
+    <input type="text" id ="string2" placeholder="Enter second string">
+    <button onclick="compareStrings()">Compare Strings</button>
+    <div id="result"></div>
+    <script>
+        const compareStrings = ()=>{
+            let comparisionResult = '' ; 
+            const str1 = document.getElementById('string1').value ;
+            const str2 = document.getElementById('string2').value ;
+            const result = document.getElementById('result') ;
+            if( str1 === str2 ){
+                comparisionResult = 'On comparision with  ==== : Strings are equal' ;
+            } else{
+                comparisionResult = 'On comparision with  ==== : Strings are not equal' ;
+            }
+            if( str1 == str2 ){
+                comparisionResult += '<br> On comparision with  == : Strings are equal' ;
+            } else{
+                comparisionResult += '<br> On comparision with  == : Strings are not equal' ;
+            }
+            if(str1.toLowerCase() === str2.toLowerCase() ){
+                comparisionResult += '<br>  Strings are equal (case insensitive) ' ;
+            } else{
+                comparisionResult += '<br> Strings are not equal (case insensitive) ' ;
+            }
+            if(str1 > str2 ){
+                comparisionResult += `<br> "${str1}" comes before  "${str2}" ` ;
+            } else if ( str1 < str2 ){
+                comparisionResult += `<br> "${str1}" comes after "${str2}" ` ;
+            } else{
+                comparisionResult += `<br> "${str1}" is equal to "${str2}" ` ;
+            }
+            result.innerHTML = comparisionResult ;
+        }
+    </script>
+</body>
+</html>

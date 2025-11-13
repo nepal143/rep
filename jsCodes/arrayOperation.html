@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARRAY OPERATIONS</title>
+</head>
+<body>
+    <div id="Array"></div>
+    <button onclick="clearArray()">Clear Array</button>
+    <input type="text" id="elment" placeholder="Enter element to add to array">
+    <button onclick="addElement()">Add Element</button>
+    <input type="text" id="indx" placeholder="Enter index to remove element">
+    <button onclick="removeElement()">Remove Element</button>
+    <input type="text" id="searchElement" placeholder="Enter element to find">
+    <button onclick="findElement()">Find Element</button>
+    <div id="result"></div>
+    <script>
+        let arr = [] ; 
+        const displayArray = () =>{
+            const arrayDiv = document.getElementById('Array');
+            arrayDiv.innerText = `Array Elements : [ ${arr.join(', ')} ] ` ;
+        }
+        displayArray() ;
+        const clearArray = () =>{
+            arr = [] ;
+            displayArray() ;
+        }
+        const addElement = () =>{
+            const element = document.getElementById('elment').value ;
+            arr.push(element) ;
+            displayArray() ;
+        }
+        const removeElement = () =>{
+            const index = document.getElementById('indx').value ;
+            if( index >=0 && index < arr.length ){
+                arr.splice(index,1) ;
+                displayArray() ;
+            } else{
+                alert("Invalid Index") ;
+            }
+        }
+        const findElement = () =>{
+            const searchElement = document.getElementById('searchElement').value ;
+            const index = arr.indexOf(searchElement) ;
+            const resultDiv = document.getElementById('result') ;
+            if( index !== -1 ){
+                resultDiv.innerText = `Element "${searchElement}" found at index ${index}` ;
+            } else{
+                resultDiv.innerText = `Element "${searchElement}" not found in the array` ;
+            }
+        }
+    </script>
+</body>
+</html>

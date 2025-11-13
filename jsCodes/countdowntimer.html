@@ -1,0 +1,33 @@
+<!DOCTYPE  html> 
+<html lang="en">   
+
+<head>  
+<title>CountDownTimer</title>
+<style>
+
+</style>
+</head>
+
+
+<body>
+    <input type="number"  id="seconds" placeholder="Enter the time in seconds" > 
+    <button onClick="startTimer()">StartTimer</button>
+    <h2 id="countdown"> </h2>
+
+    <script>
+        const startTimer =()=>{
+            let seconds = document.getElementById('seconds').value ;
+            const countdownElement = document.getElementById('countdown') ;
+            const interval = setInterval(() =>{
+                if(seconds <=0){
+                    clearInterval(interval) ;
+                    console.log("Timer Ended") ;
+                }
+                    countdownElement.innerText = `Time Remaining : ${seconds} seconds` ;
+                    seconds-- ;
+                
+            } , 1000) ;
+      }
+    </script>
+</body>
+</html>

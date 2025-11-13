@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <input type="text" id="number" name="number" placeholder="please enter a number">
+    <button onclick="GenerateTable()">Generate Table</button>
+
+    <div id="result"></div>
+    <script>
+        const GenerateTable = () =>{
+            const number  = document.getElementById('number').value;
+            let tableContent = ''; 
+            for( let i = 1 ;i < 10  ; i++){
+                let line = `<div> ${number} X ${i} = ${number*i} </div>` ;
+                console.log(line);
+                tableContent += line;
+            }
+            const result = document.getElementById('result'); 
+            result.innerHTML = tableContent; 
+        }
+    </script>
+</body>
+</html>
